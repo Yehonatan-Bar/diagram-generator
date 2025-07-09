@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  diagram-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder  # Use builder stage for development
+    image: ai-diagram-generator:dev
+    container_name: diagram-generator-dev
+    ports:
+      - "8000:8000"
+    environment:
+      # Development settings
+      - ENVIRONMENT=development
+      - LOG_LEVEL=DEBUG
+      - USE_MOCK_LLM=${USE_MOCK_LLM:-true}
+      
+      # API Configuration
+      - API_PORT=8000
+      - LOG_FORMAT=${LOG_FORMAT:-text}
+      
+      # LLM Configuration (for non-mock mode)
+      - LLM_PROVIDER=${LLM_PROVIDER:-gemini}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LLM_TEMPERATURE=${LLM_TEMPERATURE:-0.7}
+      - LLM_MAX_TOKENS=${LLM_MAX_TOKENS:-2000}
+      
+      # CORS Configuration (allow all in dev)
+      - CORS_ORIGINS=["*"]
+      
+    volumes:
+      # Mount source code for hot reload
+      - ./src:/app/src:ro
+      - ./run.py:/app/run.py:ro
+      - ./prompts.yaml:/app/prompts.yaml:ro
+      # Mount logs directory
+      - ./logs:/app/logs
+      # Mount temporary directory
+      - ./temp:/app/temp
+    command: ["python", "-m", "uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    stdin_open: true
+    tty: true
+    networks:
+      - diagram-network-dev
+
+networks:
+  diagram-network-dev:
+    driver: bridge

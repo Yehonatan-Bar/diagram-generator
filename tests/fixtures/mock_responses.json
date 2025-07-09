@@ -1,0 +1,421 @@
+{
+  "basic_web_app": {
+    "input_patterns": [
+      ".*load\\s*balancer.*ec2.*database.*",
+      ".*web\\s*application.*server.*database.*",
+      ".*application\\s*load\\s*balancer.*web.*rds.*",
+      ".*basic\\s*web\\s*application.*"
+    ],
+    "response": {
+      "nodes": [
+        {
+          "type": "LoadBalancer",
+          "name": "ApplicationLoadBalancer",
+          "properties": {
+            "scheme": "internet-facing"
+          }
+        },
+        {
+          "type": "EC2",
+          "name": "WebServer1",
+          "properties": {
+            "instance_type": "t3.micro"
+          }
+        },
+        {
+          "type": "EC2",
+          "name": "WebServer2",
+          "properties": {
+            "instance_type": "t3.micro"
+          }
+        },
+        {
+          "type": "RDS",
+          "name": "Database",
+          "properties": {
+            "engine": "postgres",
+            "multi_az": true
+          }
+        }
+      ],
+      "connections": [
+        {
+          "from": "ApplicationLoadBalancer",
+          "to": "WebServer1",
+          "label": "http"
+        },
+        {
+          "from": "ApplicationLoadBalancer",
+          "to": "WebServer2",
+          "label": "http"
+        },
+        {
+          "from": "WebServer1",
+          "to": "Database",
+          "label": "sql"
+        },
+        {
+          "from": "WebServer2",
+          "to": "Database",
+          "label": "sql"
+        }
+      ],
+      "clusters": [
+        {
+          "name": "Web Tier",
+          "nodes": ["WebServer1", "WebServer2"]
+        }
+      ]
+    }
+  },
+  "microservices": {
+    "input_patterns": [
+      ".*microservice.*api\\s*gateway.*queue.*",
+      ".*authentication.*payment.*order.*service.*",
+      ".*api\\s*gateway.*sqs.*services.*",
+      ".*microservices\\s*architecture.*"
+    ],
+    "response": {
+      "nodes": [
+        {
+          "type": "LoadBalancer",
+          "name": "APIGateway",
+          "properties": {}
+        },
+        {
+          "type": "Lambda",
+          "name": "AuthService",
+          "properties": {
+            "runtime": "python3.9",
+            "memory": 512
+          }
+        },
+        {
+          "type": "Lambda",
+          "name": "PaymentService",
+          "properties": {
+            "runtime": "python3.9",
+            "memory": 512
+          }
+        },
+        {
+          "type": "Lambda",
+          "name": "OrderService",
+          "properties": {
+            "runtime": "python3.9",
+            "memory": 512
+          }
+        },
+        {
+          "type": "SQS",
+          "name": "MessageQueue",
+          "properties": {
+            "fifo": true
+          }
+        },
+        {
+          "type": "RDS",
+          "name": "SharedDatabase",
+          "properties": {
+            "engine": "mysql"
+          }
+        },
+        {
+          "type": "S3",
+          "name": "CloudWatch",
+          "properties": {
+            "purpose": "monitoring"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "from": "APIGateway",
+          "to": "AuthService",
+          "label": "route"
+        },
+        {
+          "from": "APIGateway",
+          "to": "PaymentService",
+          "label": "route"
+        },
+        {
+          "from": "APIGateway",
+          "to": "OrderService",
+          "label": "route"
+        },
+        {
+          "from": "OrderService",
+          "to": "MessageQueue",
+          "label": "publish"
+        },
+        {
+          "from": "PaymentService",
+          "to": "MessageQueue",
+          "label": "subscribe"
+        },
+        {
+          "from": "AuthService",
+          "to": "SharedDatabase",
+          "label": "query"
+        },
+        {
+          "from": "PaymentService",
+          "to": "SharedDatabase",
+          "label": "query"
+        },
+        {
+          "from": "OrderService",
+          "to": "SharedDatabase",
+          "label": "query"
+        },
+        {
+          "from": "CloudWatch",
+          "to": "AuthService",
+          "label": "monitor"
+        },
+        {
+          "from": "CloudWatch",
+          "to": "PaymentService",
+          "label": "monitor"
+        },
+        {
+          "from": "CloudWatch",
+          "to": "OrderService",
+          "label": "monitor"
+        }
+      ],
+      "clusters": [
+        {
+          "name": "Microservices",
+          "nodes": ["AuthService", "PaymentService", "OrderService"]
+        }
+      ]
+    }
+  },
+  "serverless_pipeline": {
+    "input_patterns": [
+      ".*s3.*lambda.*pipeline.*",
+      ".*data\\s*processing.*serverless.*",
+      ".*etl.*pipeline.*lambda.*"
+    ],
+    "response": {
+      "nodes": [
+        {
+          "type": "S3",
+          "name": "InputBucket",
+          "properties": {
+            "versioning": true
+          }
+        },
+        {
+          "type": "Lambda",
+          "name": "ExtractFunction",
+          "properties": {
+            "runtime": "python3.9"
+          }
+        },
+        {
+          "type": "Lambda",
+          "name": "TransformFunction",
+          "properties": {
+            "runtime": "python3.9"
+          }
+        },
+        {
+          "type": "Lambda",
+          "name": "LoadFunction",
+          "properties": {
+            "runtime": "python3.9"
+          }
+        },
+        {
+          "type": "S3",
+          "name": "OutputBucket",
+          "properties": {
+            "encryption": "AES256"
+          }
+        },
+        {
+          "type": "SQS",
+          "name": "ProcessingQueue",
+          "properties": {}
+        }
+      ],
+      "connections": [
+        {
+          "from": "InputBucket",
+          "to": "ProcessingQueue",
+          "label": "event"
+        },
+        {
+          "from": "ProcessingQueue",
+          "to": "ExtractFunction",
+          "label": "trigger"
+        },
+        {
+          "from": "ExtractFunction",
+          "to": "TransformFunction",
+          "label": "invoke"
+        },
+        {
+          "from": "TransformFunction",
+          "to": "LoadFunction",
+          "label": "invoke"
+        },
+        {
+          "from": "LoadFunction",
+          "to": "OutputBucket",
+          "label": "write"
+        }
+      ],
+      "clusters": [
+        {
+          "name": "ETL Pipeline",
+          "nodes": ["ExtractFunction", "TransformFunction", "LoadFunction"]
+        }
+      ]
+    }
+  },
+  "simple_storage": {
+    "input_patterns": [
+      ".*simple.*s3.*",
+      ".*basic.*storage.*",
+      ".*file\\s*storage.*"
+    ],
+    "response": {
+      "nodes": [
+        {
+          "type": "S3",
+          "name": "StorageBucket",
+          "properties": {
+            "versioning": true,
+            "lifecycle": "30days"
+          }
+        },
+        {
+          "type": "Lambda",
+          "name": "AccessFunction",
+          "properties": {
+            "runtime": "python3.9"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "from": "AccessFunction",
+          "to": "StorageBucket",
+          "label": "read/write"
+        }
+      ],
+      "clusters": []
+    }
+  },
+  "queue_processing": {
+    "input_patterns": [
+      ".*queue.*processing.*",
+      ".*sqs.*worker.*",
+      ".*message\\s*processing.*"
+    ],
+    "response": {
+      "nodes": [
+        {
+          "type": "SQS",
+          "name": "InputQueue",
+          "properties": {
+            "fifo": false
+          }
+        },
+        {
+          "type": "Lambda",
+          "name": "ProcessorFunction",
+          "properties": {
+            "runtime": "python3.9",
+            "timeout": 300
+          }
+        },
+        {
+          "type": "SQS",
+          "name": "DeadLetterQueue",
+          "properties": {}
+        },
+        {
+          "type": "S3",
+          "name": "ResultsBucket",
+          "properties": {}
+        }
+      ],
+      "connections": [
+        {
+          "from": "InputQueue",
+          "to": "ProcessorFunction",
+          "label": "poll"
+        },
+        {
+          "from": "ProcessorFunction",
+          "to": "ResultsBucket",
+          "label": "store"
+        },
+        {
+          "from": "InputQueue",
+          "to": "DeadLetterQueue",
+          "label": "dlq"
+        }
+      ],
+      "clusters": []
+    }
+  },
+  "error_invalid_json": {
+    "input_patterns": [
+      ".*test\\s*error.*",
+      ".*invalid\\s*json.*",
+      ".*malformed.*"
+    ],
+    "response": "This is not valid JSON to test error handling"
+  },
+  "error_missing_nodes": {
+    "input_patterns": [
+      ".*missing\\s*nodes.*",
+      ".*incomplete\\s*spec.*"
+    ],
+    "response": {
+      "connections": [
+        {
+          "from": "NonExistent1",
+          "to": "NonExistent2"
+        }
+      ],
+      "clusters": []
+    }
+  },
+  "assistant_clarification": {
+    "input_patterns": [
+      ".*create\\s*diagram$",
+      ".*help\\s*me.*",
+      "^diagram$",
+      ".*what\\s*can\\s*you\\s*do.*"
+    ],
+    "response": {
+      "action": "ask_clarification",
+      "reasoning": "The request needs more specific details about the architecture",
+      "parameters": {
+        "question": "I'd be happy to help you create a cloud architecture diagram! Could you please provide more details about:\n\n1. What type of application or system are you building?\n2. What AWS services do you need to include?\n3. Are there any specific requirements like high availability, scalability, or security considerations?\n\nFor example, you could say: 'Create a web application with a load balancer, 2 EC2 instances, and an RDS database'"
+      }
+    }
+  },
+  "assistant_explanation": {
+    "input_patterns": [
+      ".*explain.*diagram.*",
+      ".*how\\s*to\\s*create.*",
+      ".*what\\s*is.*architecture.*"
+    ],
+    "response": {
+      "action": "explain_concept",
+      "reasoning": "User wants to understand how to create diagrams",
+      "parameters": {
+        "concept": "Creating cloud architecture diagrams",
+        "explanation": "To create a cloud architecture diagram, I need you to describe the components and their relationships. I support these AWS services:\n\n- **EC2**: Virtual servers for compute\n- **RDS**: Managed relational databases\n- **LoadBalancer**: Application or Network Load Balancers\n- **Lambda**: Serverless functions\n- **S3**: Object storage buckets\n- **SQS**: Message queuing service\n\nYou can also specify:\n- **Connections**: How services communicate (e.g., 'EC2 connects to RDS')\n- **Clusters**: Logical groupings (e.g., 'Web Tier' containing multiple EC2 instances)\n\nExample: 'Create a microservices architecture with API Gateway, 3 Lambda functions for auth/payment/orders, SQS for messaging, and a shared RDS database'"
+      }
+    }
+  }
+}

@@ -1,0 +1,379 @@
+{
+  "project_name": "diagram-generator",
+  "version": "0.1.0",
+  "last_updated": "2025-01-08T22:00:00Z",
+  "structure": {
+    "directories": [
+      "src/api",
+      "src/agents",
+      "src/tools",
+      "src/llm",
+      "src/core",
+      "src/utils",
+      "tests/unit",
+      "tests/integration",
+      "tests/fixtures",
+      "docker",
+      "docker/nginx",
+      "scripts",
+      "docs"
+    ],
+    "files": [
+      ".gitignore",
+      ".env.example",
+      ".env.docker.example",
+      ".dockerignore",
+      "Dockerfile",
+      "Dockerfile.uv",
+      "docker-compose.yml",
+      "docker-compose.dev.yml",
+      "docker-compose.uv.yml",
+      "README.md",
+      "requirements.txt",
+      "requirements-core.txt",
+      "pyproject.toml",
+      "project_structure.json",
+      "prompts.yaml",
+      "src/__init__.py",
+      "src/core/__init__.py",
+      "src/core/config.py",
+      "src/core/logging.py",
+      "src/utils/__init__.py",
+      "src/utils/decorators.py",
+      "src/llm/__init__.py",
+      "src/llm/base.py",
+      "src/llm/client.py",
+      "src/llm/gemini_client.py",
+      "src/llm/mock_client.py",
+      "src/llm/prompt_manager.py",
+      "src/tools/__init__.py",
+      "src/tools/diagram_builder.py",
+      "src/tools/validator.py",
+      "src/agents/__init__.py",
+      "src/agents/diagram_agent.py",
+      "src/agents/assistant_agent.py",
+      "src/api/__init__.py",
+      "src/api/main.py",
+      "src/api/middleware.py",
+      "src/api/health.py",
+      "src/api/diagram.py",
+      "src/api/models.py",
+      "run.py",
+      "examples/test_api.py",
+      "examples/python_client_example.py",
+      "tests/fixtures/mock_responses.json",
+      "docker/build.sh",
+      "docker/deploy.sh",
+      "docker/healthcheck.py",
+      "docker/README.md",
+      "docker/nginx/nginx.conf",
+      "CONTRIBUTING.md",
+      "LICENSE",
+      "docs/QUICKSTART.md",
+      "PROJECT_SUMMARY.md",
+      "run_tests.py",
+      "tests/__init__.py",
+      "tests/conftest.py",
+      "tests/unit/__init__.py",
+      "tests/unit/test_config.py",
+      "tests/unit/test_logging.py",
+      "tests/unit/test_llm_clients.py",
+      "tests/unit/test_tools.py",
+      "tests/unit/test_agents.py",
+      "tests/unit/test_decorators.py",
+      "tests/integration/__init__.py",
+      "tests/integration/test_api.py"
+    ],
+    "classes": [
+      {
+        "name": "Settings",
+        "file": "src/core/config.py",
+        "type": "pydantic_settings"
+      },
+      {
+        "name": "FeatureTag",
+        "file": "src/core/logging.py",
+        "type": "enum"
+      },
+      {
+        "name": "ModuleTag",
+        "file": "src/core/logging.py",
+        "type": "enum"
+      },
+      {
+        "name": "StructuredLogger",
+        "file": "src/core/logging.py",
+        "type": "class"
+      },
+      {
+        "name": "LLMResponse",
+        "file": "src/llm/base.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "BaseLLMClient",
+        "file": "src/llm/base.py",
+        "type": "abstract_class"
+      },
+      {
+        "name": "GeminiClient",
+        "file": "src/llm/gemini_client.py",
+        "type": "class"
+      },
+      {
+        "name": "MockLLMClient",
+        "file": "src/llm/mock_client.py",
+        "type": "class"
+      },
+      {
+        "name": "PromptManager",
+        "file": "src/llm/prompt_manager.py",
+        "type": "class"
+      },
+      {
+        "name": "LLMProvider",
+        "file": "src/llm/client.py",
+        "type": "enum"
+      },
+      {
+        "name": "LLMClientFactory",
+        "file": "src/llm/client.py",
+        "type": "class"
+      },
+      {
+        "name": "DiagramBuilder",
+        "file": "src/tools/diagram_builder.py",
+        "type": "class"
+      },
+      {
+        "name": "NodeSpec",
+        "file": "src/tools/validator.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "ConnectionSpec",
+        "file": "src/tools/validator.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "ClusterSpec",
+        "file": "src/tools/validator.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "DiagramSpecification",
+        "file": "src/tools/validator.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "SpecificationValidator",
+        "file": "src/tools/validator.py",
+        "type": "class"
+      },
+      {
+        "name": "DiagramAgent",
+        "file": "src/agents/diagram_agent.py",
+        "type": "class"
+      },
+      {
+        "name": "AssistantAgent",
+        "file": "src/agents/assistant_agent.py",
+        "type": "class"
+      },
+      {
+        "name": "ToolAction",
+        "file": "src/agents/assistant_agent.py",
+        "type": "enum"
+      },
+      {
+        "name": "AgentAction",
+        "file": "src/agents/assistant_agent.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "ConversationTurn",
+        "file": "src/agents/assistant_agent.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "DiagramGenerationRequest",
+        "file": "src/api/models.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "DiagramGenerationResponse",
+        "file": "src/api/models.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "AssistantRequest",
+        "file": "src/api/models.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "AssistantResponse",
+        "file": "src/api/models.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "ValidationRequest",
+        "file": "src/api/models.py",
+        "type": "pydantic_model"
+      },
+      {
+        "name": "ValidationResponse",
+        "file": "src/api/models.py",
+        "type": "pydantic_model"
+      }
+    ],
+    "functions": [
+      {
+        "name": "get_temp_dir",
+        "file": "src/core/config.py"
+      },
+      {
+        "name": "is_mock_mode",
+        "file": "src/core/config.py"
+      },
+      {
+        "name": "get_llm_config",
+        "file": "src/core/config.py"
+      },
+      {
+        "name": "log_execution_time",
+        "file": "src/utils/decorators.py"
+      },
+      {
+        "name": "with_error_handling",
+        "file": "src/utils/decorators.py"
+      },
+      {
+        "name": "get_llm_client",
+        "file": "src/llm/client.py"
+      },
+      {
+        "name": "create_client",
+        "file": "src/llm/client.py"
+      },
+      {
+        "name": "_sanitize_input",
+        "file": "src/llm/prompt_manager.py"
+      },
+      {
+        "name": "build_diagram",
+        "file": "src/tools/diagram_builder.py"
+      },
+      {
+        "name": "create_node",
+        "file": "src/tools/diagram_builder.py"
+      },
+      {
+        "name": "connect_nodes",
+        "file": "src/tools/diagram_builder.py"
+      },
+      {
+        "name": "create_cluster",
+        "file": "src/tools/diagram_builder.py"
+      },
+      {
+        "name": "validate",
+        "file": "src/tools/validator.py"
+      },
+      {
+        "name": "suggest_fix",
+        "file": "src/tools/validator.py"
+      },
+      {
+        "name": "get_last_image_data",
+        "file": "src/tools/diagram_builder.py"
+      },
+      {
+        "name": "generate_diagram",
+        "file": "src/agents/diagram_agent.py"
+      },
+      {
+        "name": "validate_specification",
+        "file": "src/agents/diagram_agent.py"
+      },
+      {
+        "name": "process_conversation",
+        "file": "src/agents/assistant_agent.py"
+      },
+      {
+        "name": "lifespan",
+        "file": "src/api/main.py"
+      },
+      {
+        "name": "logging_middleware",
+        "file": "src/api/middleware.py"
+      },
+      {
+        "name": "health_check",
+        "file": "src/api/health.py"
+      },
+      {
+        "name": "readiness_check",
+        "file": "src/api/health.py"
+      },
+      {
+        "name": "liveness_check",
+        "file": "src/api/health.py"
+      },
+      {
+        "name": "get_agents",
+        "file": "src/api/diagram.py"
+      },
+      {
+        "name": "generate_diagram",
+        "file": "src/api/diagram.py"
+      },
+      {
+        "name": "assistant_conversation",
+        "file": "src/api/diagram.py"
+      },
+      {
+        "name": "validate_specification",
+        "file": "src/api/diagram.py"
+      }
+    ]
+  },
+  "statistics": {
+    "total_files": 63,
+    "total_directories": 14,
+    "total_classes": 28,
+    "total_functions": 30,
+    "lines_of_code": 6000,
+    "documentation_complete": true,
+    "package_manager": "uv",
+    "tests_complete": true
+  },
+  "dependencies": {
+    "core": [
+      "fastapi==0.115.6",
+      "uvicorn[standard]==0.34.0",
+      "pydantic==2.10.5",
+      "pydantic-settings==2.7.1"
+    ],
+    "diagram": [
+      "diagrams==0.24.4",
+      "graphviz==0.20.3"
+    ],
+    "llm": [
+      "google-generativeai==0.8.3",
+      "openai==1.61.0"
+    ],
+    "utilities": [
+      "python-dotenv==1.0.1",
+      "pyyaml==6.0.2",
+      "structlog==25.1.0",
+      "pythonjsonlogger==3.2.0",
+      "tenacity==9.0.0",
+      "httpx==0.28.1"
+    ],
+    "testing": [
+      "pytest==8.3.5",
+      "pytest-asyncio==0.25.2",
+      "pytest-cov==6.0.0"
+    ]
+  }
+}

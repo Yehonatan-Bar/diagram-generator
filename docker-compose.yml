@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  diagram-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ai-diagram-generator:latest
+    container_name: diagram-generator
+    ports:
+      - "8000:8000"
+    environment:
+      # API Configuration
+      - API_PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      
+      # LLM Configuration
+      - LLM_PROVIDER=${LLM_PROVIDER:-gemini}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - USE_MOCK_LLM=${USE_MOCK_LLM:-false}
+      - LLM_TEMPERATURE=${LLM_TEMPERATURE:-0.7}
+      - LLM_MAX_TOKENS=${LLM_MAX_TOKENS:-2000}
+      
+      # CORS Configuration
+      - CORS_ORIGINS=${CORS_ORIGINS:-["*"]}
+      
+      # Application Settings
+      - MAX_RETRIES=${MAX_RETRIES:-3}
+      - RETRY_DELAY=${RETRY_DELAY:-1.0}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-30.0}
+      
+    volumes:
+      # Mount logs directory
+      - ./logs:/app/logs
+      # Mount temporary directory for diagrams
+      - diagram-temp:/app/temp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; response = httpx.get('http://localhost:8000/health'); exit(0 if response.status_code == 200 else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - diagram-network
+
+  # Optional: Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: diagram-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - diagram-generator
+    networks:
+      - diagram-network
+    profiles:
+      - production
+
+networks:
+  diagram-network:
+    driver: bridge
+
+volumes:
+  diagram-temp:
+    driver: local

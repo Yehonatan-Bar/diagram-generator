@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  diagram-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile.uv
+    container_name: diagram-generator-uv
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TEMP_DIR=/app/temp
+      - LOG_DIR=/app/logs
+    volumes:
+      - ./logs:/app/logs
+      - ./temp:/app/temp
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; response = httpx.get('http://localhost:8000/health'); exit(0 if response.status_code == 200 else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - diagram-network
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  diagram-network:
+    driver: bridge

@@ -1,0 +1,43 @@
+# Core Dependencies
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+pydantic-settings==2.7.1
+
+# Diagram Generation
+diagrams==0.24.4
+graphviz==0.20.3
+
+# LLM Integration
+google-generativeai==0.8.3
+openai==1.61.0
+httpx==0.28.1
+
+# Async Support
+aiofiles==24.1.0
+# asyncio is built-in in Python 3.12
+
+# Utilities
+python-dotenv==1.0.1
+pyyaml==6.0.2
+python-multipart==0.0.19
+tenacity==9.0.0
+
+# Logging & Monitoring
+python-json-logger==3.2.1
+structlog==25.1.0
+
+# Testing
+pytest==8.3.5
+pytest-asyncio==0.25.2
+pytest-cov==6.0.0
+pytest-mock==3.14.0
+
+# Development Tools
+black==24.10.0
+ruff==0.8.4
+mypy==1.13.0
+pre-commit==4.0.1
+
+# Type Stubs
+types-pyyaml==6.0.12.20240917

@@ -1,0 +1,25 @@
+# Core Dependencies
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+pydantic-settings==2.7.1
+
+# Diagram Generation
+diagrams==0.23.4
+
+# LLM Integration
+google-generativeai==0.8.3
+openai==1.61.0
+httpx==0.28.1
+
+# Async Support
+aiofiles==24.1.0
+
+# Utilities
+python-dotenv==1.0.1
+pyyaml==6.0.2
+python-multipart==0.0.19
+
+# Logging & Monitoring
+python-json-logger==3.2.1
+structlog==25.1.0

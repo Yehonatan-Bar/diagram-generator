@@ -1,0 +1,15 @@
+Collecting mypy-extensions
+  Using cached mypy_extensions-1.1.0-py3-none-any.whl.metadata (1.1 kB)
+Collecting packaging
+  Using cached packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting pathspec
+  Using cached pathspec-0.12.1-py3-none-any.whl.metadata (21 kB)
+Collecting platformdirs
+  Using cached platformdirs-4.3.8-py3-none-any.whl.metadata (12 kB)
+Using cached mypy_extensions-1.1.0-py3-none-any.whl (5.0 kB)
+Using cached packaging-25.0-py3-none-any.whl (66 kB)
+Using cached pathspec-0.12.1-py3-none-any.whl (31 kB)
+Using cached platformdirs-4.3.8-py3-none-any.whl (18 kB)
+Installing collected packages: platformdirs, pathspec, packaging, mypy-extensions
+
+Successfully installed mypy-extensions-1.1.0 packaging-25.0 pathspec-0.12.1 platformdirs-4.3.8
