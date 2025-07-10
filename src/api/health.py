@@ -45,7 +45,7 @@ async def readiness_check():
         logger.error(
             "LLM client check failed",
             feature=FeatureTag.API,
-            module=ModuleTag.API,
+            module=ModuleTag.API_ENDPOINTS,
             function="readiness_check",
             error=e
         )

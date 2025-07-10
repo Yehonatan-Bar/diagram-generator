@@ -45,7 +45,7 @@ def get_agents():
         logger.info(
             "Initialized agent instances",
             feature=FeatureTag.API,
-            module=ModuleTag.API,
+            module=ModuleTag.API_ENDPOINTS,
             function="get_agents"
         )
     
@@ -72,7 +72,7 @@ async def generate_diagram(
     logger.info(
         f"Generating diagram for description",
         feature=FeatureTag.DIAGRAM_GENERATION,
-        module=ModuleTag.API,
+        module=ModuleTag.API_ENDPOINTS,
         function="generate_diagram",
         params={
             "description_length": len(request.description),
@@ -97,7 +97,7 @@ async def generate_diagram(
         logger.info(
             "Successfully generated diagram",
             feature=FeatureTag.DIAGRAM_GENERATION,
-            module=ModuleTag.API,
+            module=ModuleTag.API_ENDPOINTS,
             function="generate_diagram",
             params={
                 "image_size": len(image_data),
@@ -121,7 +121,7 @@ async def generate_diagram(
         logger.error(
             f"Failed to generate diagram",
             feature=FeatureTag.DIAGRAM_GENERATION,
-            module=ModuleTag.API,
+            module=ModuleTag.API_ENDPOINTS,
             function="generate_diagram",
             params={"request_id": request_id},
             error=e
@@ -165,7 +165,7 @@ async def assistant_conversation(
     logger.info(
         "Processing assistant request",
         feature=FeatureTag.ASSISTANT,
-        module=ModuleTag.API,
+        module=ModuleTag.API_ENDPOINTS,
         function="assistant_conversation",
         params={
             "message_length": len(request.message),
@@ -209,7 +209,7 @@ async def assistant_conversation(
         logger.info(
             f"Assistant completed action: {response_type}",
             feature=FeatureTag.ASSISTANT,
-            module=ModuleTag.API,
+            module=ModuleTag.API_ENDPOINTS,
             function="assistant_conversation",
             params={
                 "response_type": response_type,
@@ -231,7 +231,7 @@ async def assistant_conversation(
         logger.error(
             "Failed to process assistant request",
             feature=FeatureTag.ASSISTANT,
-            module=ModuleTag.API,
+            module=ModuleTag.API_ENDPOINTS,
             function="assistant_conversation",
             params={"request_id": request_id},
             error=e
@@ -265,7 +265,7 @@ async def validate_specification(
     logger.info(
         "Validating specification",
         feature=FeatureTag.VALIDATION,
-        module=ModuleTag.API,
+        module=ModuleTag.API_ENDPOINTS,
         function="validate_specification",
         params={
             "spec_length": len(request.specification),
@@ -292,7 +292,7 @@ async def validate_specification(
         logger.error(
             "Failed to validate specification",
             feature=FeatureTag.VALIDATION,
-            module=ModuleTag.API,
+            module=ModuleTag.API_ENDPOINTS,
             function="validate_specification",
             params={"request_id": request_id},
             error=e

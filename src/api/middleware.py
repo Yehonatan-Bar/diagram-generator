@@ -23,7 +23,7 @@ async def logging_middleware(request: Request, call_next):
     logger.info(
         f"Incoming request: {request.method} {request.url.path}",
         feature=FeatureTag.API,
-        module=ModuleTag.API,
+        module=ModuleTag.MIDDLEWARE,
         function="logging_middleware",
         params={
             "method": request.method,
@@ -47,7 +47,7 @@ async def logging_middleware(request: Request, call_next):
     logger.info(
         f"Request completed: {request.method} {request.url.path}",
         feature=FeatureTag.API,
-        module=ModuleTag.API,
+        module=ModuleTag.MIDDLEWARE,
         function="logging_middleware",
         params={
             "method": request.method,

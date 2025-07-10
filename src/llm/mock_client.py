@@ -96,7 +96,7 @@ class MockLLMClient(BaseLLMClient):
                 ],
                 "response": {
                     "nodes": [
-                        {"type": "S3", "name": "DataBucket", "properties": {"versioning": true}},
+                        {"type": "S3", "name": "DataBucket", "properties": {"versioning": True}},
                         {"type": "Lambda", "name": "ProcessFunction", "properties": {"runtime": "python3.9"}},
                         {"type": "SQS", "name": "EventQueue", "properties": {}}
                     ],
@@ -200,7 +200,7 @@ class MockLLMClient(BaseLLMClient):
         # Default response if no pattern matches
         if response_data is None:
             logger.info(
-                "No pattern matched, using default response",
+                f"No pattern matched for input: '{user_input[:100]}...', using default response",
                 feature=FeatureTag.DIAGRAM_GENERATION,
                 module=ModuleTag.LLM_CLIENT,
                 function="generate"

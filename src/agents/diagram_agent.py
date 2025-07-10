@@ -77,10 +77,8 @@ class DiagramAgent:
         # Step 1: Generate initial specification
         prompt = self.prompts.get_prompt(
             "diagram_generation",
-            {
-                "user_input": user_description,
-                "node_types": ", ".join(self.builder.get_supported_node_types())
-            }
+            user_input=user_description,
+            node_types=", ".join(self.builder.get_supported_node_types())
         )
         
         spec_json = None
@@ -153,12 +151,10 @@ class DiagramAgent:
                         # Create repair prompt
                         prompt = self.prompts.get_prompt(
                             "repair_specification",
-                            {
-                                "original_response": spec_json,
-                                "error_message": error_msg,
-                                "suggestions": suggestions,
-                                "node_types": ", ".join(self.builder.get_supported_node_types())
-                            }
+                            original_response=spec_json,
+                            error_message=error_msg,
+                            suggestions=suggestions,
+                            node_types=", ".join(self.builder.get_supported_node_types())
                         )
             
             except Exception as e:

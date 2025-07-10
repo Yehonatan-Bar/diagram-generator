@@ -97,11 +97,9 @@ class AssistantAgent:
         # Get reasoning prompt
         prompt = self.prompts.get_prompt(
             "assistant_reasoning",
-            {
-                "context": context,
-                "user_input": current_input,
-                "available_tools": self._get_tool_descriptions()
-            }
+            context=context,
+            user_input=current_input,
+            available_tools=self._get_tool_descriptions()
         )
         
         # Get LLM reasoning
@@ -144,9 +142,9 @@ class AssistantAgent:
     def _get_tool_descriptions(self) -> str:
         """Get descriptions of available tools"""
         descriptions = [
-            "1. generate_diagram: Generate a cloud architecture diagram from a description",
-            "2. ask_clarification: Ask the user for more specific information",
-            "3. explain_concept: Explain how to use the diagram generation system"
+            "1. generate_diagram - Generate a cloud architecture diagram from a description",
+            "2. ask_clarification - Ask the user for more specific information",
+            "3. explain_concept - Explain how to use the diagram generation system"
         ]
         return "\n".join(descriptions)
     
@@ -274,10 +272,8 @@ class AssistantAgent:
         """Generate an explanation for a concept"""
         prompt = self.prompts.get_prompt(
             "explanation_template",
-            {
-                "user_input": concept,
-                "node_types": "EC2, RDS, LoadBalancer, SQS, Lambda, S3"
-            }
+            user_input=concept,
+            node_types="EC2, RDS, LoadBalancer, SQS, Lambda, S3"
         )
         
         response = await self.llm.generate(

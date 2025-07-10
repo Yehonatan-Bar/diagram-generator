@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     logger.info(
         "Starting diagram generation API service",
         feature=FeatureTag.API,
-        module=ModuleTag.API,
+        module=ModuleTag.API_ENDPOINTS,
         function="lifespan",
         params={
             "environment": settings.environment,
@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     logger.info(
         "Shutting down diagram generation API service",
         feature=FeatureTag.API,
-        module=ModuleTag.API,
+        module=ModuleTag.API_ENDPOINTS,
         function="lifespan"
     )
 
@@ -76,7 +76,7 @@ async def global_exception_handler(request, exc):
     logger.error(
         f"Unhandled exception: {str(exc)}",
         feature=FeatureTag.API,
-        module=ModuleTag.API,
+        module=ModuleTag.API_ENDPOINTS,
         function="global_exception_handler",
         params={
             "path": request.url.path,
